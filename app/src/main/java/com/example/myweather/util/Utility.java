@@ -21,4 +21,16 @@ public class Utility {
         }
         return null;
     }
+
+    public static City handleCityResponse(String response){
+        try{
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather6");
+            String cityContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(cityContent, City.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

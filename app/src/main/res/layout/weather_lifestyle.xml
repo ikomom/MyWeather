@@ -33,9 +33,9 @@
                     android:id="@+id/comfort_pic"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_above="@+id/comfort"
-                    android:layout_marginBottom="10dp"/>
+                    android:tint="@color/colorFont"
+                    android:src="@drawable/lifestyle_comfortable"
+                    android:layout_above="@+id/comfort" android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/comfort_text"
@@ -76,9 +76,9 @@
                     android:id="@+id/car_wash_pic"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_above="@+id/car_wash"
-                    android:layout_marginBottom="10dp"/>
+                    android:tint="@color/colorFont"
+                    android:src="@drawable/lifestyle_washc"
+                    android:layout_above="@+id/car_wash" android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/car_wash_text"
@@ -120,9 +120,10 @@
                     android:id="@+id/sport_pic"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/lifestyle_spt"
                     android:layout_above="@+id/sport"
-                    android:scaleType="centerCrop"/>
+                    android:tint="@color/colorFont"
+                    android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/sport_text"
@@ -169,9 +170,10 @@
                     android:id="@+id/cold_pic"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:tint="@color/colorFont"
+                    android:src="@drawable/lifestyle_drgs"
                     android:layout_above="@+id/cold"
-                    android:layout_centerHorizontal="true"
-                    android:scaleType="centerCrop" />
+                    android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/cold_text"
@@ -198,7 +200,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="?android:attr/borderlessButtonStyle"
-                    android:background="@drawable/ripple"/>
+                    android:background="@drawable/ripple" android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/clothes"
@@ -213,8 +216,10 @@
                     android:id="@+id/colthes_pic"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:src="@drawable/lifestyle_clothes"
                     android:layout_above="@+id/clothes"
-                    android:layout_centerHorizontal="true" />
+                    android:tint="@color/colorFont"
+                    android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/clothes_text"
@@ -256,15 +261,17 @@
                     android:id="@+id/uv_pic"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:tint="@color/colorFont"
+                    android:src="@drawable/lifestyle_uv"
                     android:layout_above="@+id/uv"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_alignParentStart="true"/>
 
             <TextView
                     android:id="@+id/uv_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/uv"
+
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/colorBlack"
                     android:textSize="18sp" />

@@ -1,6 +1,7 @@
 package com.example.myweather;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,11 +15,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,6 +34,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.myweather.gson.Forecast;
 import com.example.myweather.gson.Hourly;
+import com.example.myweather.gson.Lifestyle;
 import com.example.myweather.gson.Weather;
 import com.example.myweather.hourList.Hour;
 import com.example.myweather.hourList.HourAdapter;
@@ -62,6 +68,7 @@ public class MainActivity extends BaseActivity {
     private RelativeLayout nowLayout;
 
     //weather_lifestyle
+    private List<Lifestyle> lifestyles = new ArrayList<>();
     private TextView carWashText;
     private TextView sportText;
     private TextView comfortText;
@@ -76,7 +83,7 @@ public class MainActivity extends BaseActivity {
     private Button clothesBtn;
     private Button coldBtn;
 
-    //
+    //传递的信息
     private String carWashInfo;
     private String carWashSign;
 
@@ -94,7 +101,6 @@ public class MainActivity extends BaseActivity {
 
     private String coldInfo;
     private String coldSign;
-
     //update
     private TextView update_time;
 
@@ -141,6 +147,7 @@ public class MainActivity extends BaseActivity {
         update_time = (TextView) findViewById(R.id.update_time_text);
 
         //weather_lifestyle
+        List<Lifestyle> lifestyles = new ArrayList<>();
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
@@ -189,20 +196,20 @@ public class MainActivity extends BaseActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String weatherString = prefs.getString("weatherResponse", null);        // weather 保存API 返回的字符串
 
-            if (weatherString != null){
+            if (weatherString != null) {
                 // 有缓存时直接解析天气数据
                 Weather weather = Utility.handleWeatherResponse(weatherString);
                 showWeatherInfo(weather);
-            //    coordinatorLayout.setVisibility(View.VISIBLE);
-            }else {
+                //    coordinatorLayout.setVisibility(View.VISIBLE);
+            } else {
                 // 无缓存时向服务器查询数据
-                if (getNetworkInfo() != null && getNetworkInfo().isAvailable()){
+                if (getNetworkInfo() != null && getNetworkInfo().isAvailable()) {
                     // 查询完之后显示 coordinatorLayout.setVisibility(View.VISIBLE);
                     LocationClientOption option = new LocationClientOption();
                     option.setIsNeedAddress(true);
                     mlocationClient.setLocOption(option);
                     mlocationClient.start();
-                }else{
+                } else {
                     showDialog();
                 }
 
@@ -243,11 +250,13 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 画渐变动画
+     *
      * @param view
      */
     private void showAnimationAlpha(final View view) {
         Animation alpha = AnimationUtils.loadAnimation(MainActivity.this, R.anim.alpha_before);
         view.startAnimation(alpha);
+
         alpha.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -257,8 +266,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                String cityName = prefs.getString("cityName", null);
-                //   requestWeather(cityName);
+                String location = prefs.getString("location", null);
+                requestWeather(location);
                 Animation alpha = AnimationUtils.loadAnimation(MainActivity.this, R.anim.alpha_after);
                 view.startAnimation(alpha);
             }
@@ -327,42 +336,90 @@ public class MainActivity extends BaseActivity {
         titleCity.setText(location);
         degreeText.setText(degree);
         weatherInfo.setText(weatherInfo_show);
-        update_time.setText("数据更新时间"+updateTime.split(" ")[1]);
+        update_time.setText("数据更新时间" + updateTime.split(" ")[1]);
 
         //weather_forecast
         forecastLayout.removeAllViews();
-        for(Forecast forecast:weather.forecast){
-            //添加未来天气
-            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.weather_forecast_item, forecastLayout, false);
-            TextView dateText = (TextView)view.findViewById(R.id.data_text);
-            TextView infoText = (TextView)view.findViewById(R.id.info_text);
-            TextView maxMinText = (TextView)view.findViewById(R.id.max_min_text);
-            ImageView weatherPic = (ImageView)view.findViewById(R.id.weather_pic);
+        if (weather.forecast != null) {
+            for (Forecast forecast : weather.forecast) {
+                //添加未来天气
+                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.weather_forecast_item, forecastLayout, false);
+                TextView dateText = (TextView) view.findViewById(R.id.data_text);
+                TextView infoText = (TextView) view.findViewById(R.id.info_text);
+                TextView maxMinText = (TextView) view.findViewById(R.id.max_min_text);
+                ImageView weatherPic = (ImageView) view.findViewById(R.id.weather_pic);
 
-            //获取资源id,并且设置图片
-            String weatherCode = "weather_"+forecast.cond_code_d;
-            int resId = getResources().getIdentifier(weatherCode, "drawable", this.getPackageName());
-            if (resId != 0){
-                weatherPic.setImageResource(resId);
+                //获取资源id,并且设置图片
+                String weatherCode = "weather_" + forecast.cond_code_d;
+                int resId = getResources().getIdentifier(weatherCode, "drawable", this.getPackageName());
+                if (resId != 0) {
+                    weatherPic.setImageResource(resId);
+                }
+
+                dateText.setText(Time.parseTime(forecast.date));
+                infoText.setText(forecast.cond_txt_d);
+                maxMinText.setText(forecast.temperature_max + " ～ " + forecast.temperature_min);
+                forecastLayout.addView(view);
             }
-
-            dateText.setText(Time.parseTime(forecast.date));
-            infoText.setText(forecast.cond_txt_d);
-            maxMinText.setText(forecast.temperature_max + " ～ " + forecast.temperature_min);
-            forecastLayout.addView(view);
         }
 
-        //hour
-        hourList.clear();
-        for (Hourly hourly:weather.hourly){
-            Hour hour = new Hour();
-            hour.setDegree(hourly.temperature + "°" );
-            hour.setText(hourly.cond_text);
-            hour.setTime(hourly.time_now.split(" ")[1]);
-            hourList.add(hour);
+//        //hour不能使用了，接下来添加风速等信息吧
+//        try {
+//            hourList.clear();
+//            for (Hourly hourly:weather.hourly){
+//                Hour hour = new Hour();
+//                hour.setDegree(hourly.temperature + "°" );
+//                hour.setText(hourly.cond_text);
+//                hour.setTime(hourly.time_now.split(" ")[1]);
+//                hourList.add(hour);
+//            }
+//        } catch (Exception e) {
+//           e.printStackTrace();
+//           ToastUtil.showMessage(getApplicationContext(),"空的");
+//        }
+//        hourAdapter.notifyDataSetChanged();
+
+        //lifestyle
+        lifestyles.clear();
+        if ( weather.lifestyle != null) {
+            for (Lifestyle lifestyle : weather.lifestyle) {
+                switch (lifestyle.life_type) {
+                    case "comf":
+                        comfortText.setText(lifestyle.brf);
+                        comfortInfo = lifestyle.txt;
+                        comfortSign = lifestyle.brf;
+                        break;
+                    case "cw":
+                        carWashText.setText(lifestyle.brf);
+                        carWashInfo = lifestyle.txt;
+                        carWashSign = lifestyle.brf;
+                        break;
+                    case "drsg":
+                        clothesText.setText(lifestyle.brf);
+                        clothesInfo = lifestyle.txt;
+                        clothesSign = lifestyle.brf;
+                        break;
+                    case "flu":
+                        coldText.setText(lifestyle.brf);
+                        coldInfo = lifestyle.txt;
+                        coldSign = lifestyle.brf;
+                        break;
+                    case "sport":
+                        sportText.setText(lifestyle.brf);
+                        sportInfo = lifestyle.txt;
+                        sportSign = lifestyle.brf;
+                        break;
+                    case "uv":
+                        uvText.setText(lifestyle.brf);
+                        uvInfo = lifestyle.txt;
+                        uvSign = lifestyle.brf;
+                        break;
+                }
+
+            }
         }
 
-        hourAdapter.notifyDataSetChanged();
+        swipeRefresh.setRefreshing(false);
     }
 
     /**
@@ -376,7 +433,7 @@ public class MainActivity extends BaseActivity {
                     for (int result : grantResults) {
                         if (result != PackageManager.PERMISSION_GRANTED) {
                             // 如果存在某个权限没有处理
-                          //  finish();
+                            //  finish();
                         }
                     }
                 } else {
@@ -409,8 +466,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    public void showDialog(){
-        AlertDialog.Builder alertDialog  = new AlertDialog.Builder(MainActivity.this);
+    /**
+     * 弹出信息
+     */
+    public void showDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setMessage("当前无网络,请先打开网络");
         alertDialog.setCancelable(false);
         alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -426,12 +486,87 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onClick(View view) {
+        // 通过 SuggestionInfoActivity 中的静态方法直接传值
+        switch (view.getId()) {
+            case R.id.comfort_button:
+                SuggestionInfoActivity.actionStart(this, comfortInfo, comfortSign, "舒适度指数");
+                break;
+            case R.id.car_wash_button:
+                SuggestionInfoActivity.actionStart(this, carWashInfo, carWashSign, "洗车指数");
+                break;
+            case R.id.sport_button:
+                SuggestionInfoActivity.actionStart(this, sportInfo, sportSign, "运动指数");
+                break;
+            case R.id.cold_button:
+                SuggestionInfoActivity.actionStart(this, coldInfo, coldSign, "感冒指数");
+                break;
+            case R.id.clothes_button:
+                SuggestionInfoActivity.actionStart(this, clothesInfo, clothesSign, "穿衣指数");
+                break;
+            case R.id.uv_button:
+                SuggestionInfoActivity.actionStart(this, uvInfo, uvSign, "紫外线指数");
+                break;
+            default:
+                break;
+        }
+    }
 
+    /**
+     * 添加 actionbar 菜单项
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    /**
+     * 菜单点击事件响应
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.setting:
+                // 跳转到设置界面
+                Intent intent1 = new Intent(this, SettingActivity.class);
+                intent1.putExtra("weather_title", "设置");
+                startActivity(intent1);
+                break;
+            case R.id.night_model:
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = pref.edit();
+                boolean isNight = pref.getBoolean("isNight", false);
+                if (isNight) {
+                    // 如果已经是夜间模式
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    recreate();
+                    editor.putBoolean("isNight", false);
+                    editor.apply();
+                } else {
+                    // 如果是日间模式
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    recreate();
+                    editor.putBoolean("isNight", true);
+                    editor.apply();
+                }
+                break;
+        }
+        return true;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mlocationClient.stop();
+    }
+
+
+    /**
+     * 设置自身的静态跳转函数
+     */
+    public static void actionStart(Context context, String location) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("location", location);
+        context.startActivity(intent);
     }
 }

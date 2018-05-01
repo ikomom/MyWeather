@@ -2,8 +2,6 @@
     <dbname value="My_Weather"/>
     <version value="1"/>
     <list>
-        <mapping class="com.example.myweather.gson.SK"/>
-        <mapping class="com.example.myweather.model.Province"/>
-        <mapping class="com.example.myweather.model.City"/>
+        <mapping class="com.example.myweather.db.CityRecond"/>
     </list>
 </litepal>

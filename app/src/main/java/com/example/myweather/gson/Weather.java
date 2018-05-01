@@ -17,7 +17,7 @@ public class Weather {
 
     public List<Hourly> hourly;
 
-    public Lifestyle lifestyle;
+    public List<Lifestyle> lifestyle;
 
     @SerializedName("update")
     public Update update_time;
