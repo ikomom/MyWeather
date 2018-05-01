@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/coor_layout"
-        android:layout_width="match_parent" android:layout_height="match_parent"
-        android:background="@color/colorBackground"
-        android:visibility="invisible">
-    <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:elevation="0dp"
-    >
-        <include
-                android:id="@+id/tool_bar"
-                layout="@layout/weather_title"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-        />
-    </android.support.design.widget.AppBarLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorBackground">
+       <!-- android:visibility="invisible"-->
+
+    <include
+            android:id="@+id/tool_bar"
+            layout="@layout/weather_title"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
@@ -35,6 +29,7 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                 <include layout="@layout/weather_now"/>
 
                 <include layout="@layout/weather_hourly"/>
@@ -45,12 +40,13 @@
 
                 <include layout="@layout/weather_space"/>
 
-                <include layout="@layout/weather_space"/>
-
-                <include layout="@layout/weather_suggestion"/>
-
+                <include layout="@layout/weather_lifestyle"/>
 
             </LinearLayout>
+
         </ScrollView>
+
     </android.support.v4.widget.SwipeRefreshLayout>
-</android.support.design.widget.CoordinatorLayout>
+
+
+</LinearLayout>

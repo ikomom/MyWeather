@@ -39,17 +39,26 @@
 
     </LinearLayout>
 
-    <TextView
-            android:id="@+id/max_min_text"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/colorFont"
-    />
 
+       <TextView
+               android:id="@+id/max_min_text"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:gravity="right"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_vertical"
+               android:textColor="@color/colorFont"
+       />
 
+       <TextView
+               android:id="@+id/max_max_text"
+               android:layout_width="0dp"
+               android:layout_weight="1"
+               android:gravity="right"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_vertical"
+               android:textColor="@color/colorFont"
+       />
 
 
 </LinearLayout>

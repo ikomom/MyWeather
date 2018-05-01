@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp">
-
         <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -18,14 +15,12 @@
                 android:background="@color/colorWhite"
 
         >
-
             <Button
                     android:id="@+id/comfort_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     style="?android:attr/borderlessButtonStyle"
-                    android:background="@drawable/ripple" />
-
+                    android:background="@drawable/ripple"/>
             <TextView
                     android:id="@+id/comfort"
                     android:layout_width="wrap_content"
@@ -34,7 +29,6 @@
                     android:text="舒适指数"
                     android:textColor="@color/colorFont"
                     android:textSize="12sp"/>
-
             <ImageView
                     android:id="@+id/comfort_pic"
                     android:layout_width="match_parent"
@@ -53,7 +47,6 @@
                     android:textSize="18sp"/>
 
         </RelativeLayout>
-
 
         <RelativeLayout
                 android:layout_width="0dp"
@@ -99,7 +92,6 @@
 
         </RelativeLayout>
 
-
         <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -140,13 +132,8 @@
                     android:layout_below="@+id/sport"
                     android:textColor="@color/colorBlack"
                     android:textSize="18sp"/>
-
-
         </RelativeLayout>
-
-
     </LinearLayout>
-
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -286,5 +273,4 @@
         </RelativeLayout>
 
     </LinearLayout>
-
 </LinearLayout>

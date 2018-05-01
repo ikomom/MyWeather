@@ -1,11 +1,6 @@
-package com.example.myweather.hour;
-
-/**
- * Created by len_titude on 2017/5/13.
- */
+package com.example.myweather.hourList;
 
 public class Hour {
-
     private String degree;
 
     private String time;
