@@ -32,7 +32,7 @@
 
                 <include layout="@layout/weather_now"/>
 
-                <include layout="@layout/weather_hourly"/>
+                <!--<include layout="@layout/weather_hourly"/>-->
 
                 <include layout="@layout/weather_space"/>
 

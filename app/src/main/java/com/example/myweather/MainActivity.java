@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity {
     //weather_now
     private TextView degreeText;
     private TextView weatherInfo;
+    private TextView wind_dir, wind_sc, wind_spd, hum, pcpn, pres;
     private RelativeLayout nowLayout;
 
     //weather_lifestyle
@@ -129,22 +130,28 @@ public class MainActivity extends BaseActivity {
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
 
         //设置hourly
-        hourDegree = (TextView) findViewById(R.id.hour_degree);
-        hourText = (TextView) findViewById(R.id.hour_text);
-        hourTime = (TextView) findViewById(R.id.hout_time);
-
-        hourRecycler = (RecyclerView) findViewById(R.id.weather_hourly);
-        hourAdapter = new HourAdapter(hourList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        hourRecycler.setLayoutManager(linearLayoutManager);
-        hourRecycler.setAdapter(hourAdapter);
+//        hourDegree = (TextView) findViewById(R.id.hour_degree);
+//        hourText = (TextView) findViewById(R.id.hour_text);
+//        hourTime = (TextView) findViewById(R.id.hout_time);
+//
+//        hourRecycler = (RecyclerView) findViewById(R.id.weather_hourly);
+//        hourAdapter = new HourAdapter(hourList);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        hourRecycler.setLayoutManager(linearLayoutManager);
+//        hourRecycler.setAdapter(hourAdapter);
 
         //weather_now
         nowLayout = (RelativeLayout) findViewById(R.id.weather_now_layout);
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfo = (TextView) findViewById(R.id.weather_info_text);
         update_time = (TextView) findViewById(R.id.update_time_text);
+        wind_dir = (TextView) findViewById(R.id.wind_direction);
+        wind_sc = (TextView) findViewById(R.id.wind_strength);
+        wind_spd = (TextView) findViewById(R.id.wind_speed);
+        hum = (TextView) findViewById(R.id.hum);
+        pcpn = (TextView) findViewById(R.id.rain_count);
+        pres = (TextView) findViewById(R.id.pres);
 
         //weather_lifestyle
         List<Lifestyle> lifestyles = new ArrayList<>();
@@ -327,16 +334,29 @@ public class MainActivity extends BaseActivity {
      */
 
     private void showWeatherInfo(Weather weather) {
+
+        //weather_now
         String location = weather.basic_data.location;
         String degree = weather.now.temperature;
         String weatherInfo_show = weather.now.cond_txt;
         String updateTime = weather.update_time.local_time;
+        String windDirection = weather.now.wind_dir;
+        String windStrength = weather.now.wind_sc;
+        String windSpeed = weather.now.wind_spd;
+        String relativeHum = weather.now.hum;
+        String rainCount = weather.now.pcpn;
+        String presPa = weather.now.pres;
 
-        //weather_now
         titleCity.setText(location);
         degreeText.setText(degree);
         weatherInfo.setText(weatherInfo_show);
         update_time.setText("数据更新时间" + updateTime.split(" ")[1]);
+        wind_dir.setText("风向:" + windDirection);
+        wind_sc.setText("强度:" + windStrength);
+        wind_spd.setText("风速:" + windSpeed + "km/h");
+        hum.setText("湿度:" + relativeHum + "%");
+        pcpn.setText("降水量:" + rainCount + "ms");
+        pres.setText("气压:" + presPa + "Pa");
 
         //weather_forecast
         forecastLayout.removeAllViews();
@@ -381,7 +401,7 @@ public class MainActivity extends BaseActivity {
 
         //lifestyle
         lifestyles.clear();
-        if ( weather.lifestyle != null) {
+        if (weather.lifestyle != null) {
             for (Lifestyle lifestyle : weather.lifestyle) {
                 switch (lifestyle.life_type) {
                     case "comf":

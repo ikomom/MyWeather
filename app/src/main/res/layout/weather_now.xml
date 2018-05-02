@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="410dp"
                 android:background="@color/colorWhite">
     <RelativeLayout
             android:id="@+id/weather_now_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="300dp"
             android:background="@color/colorWhite">
         <TextView
                 android:id="@+id/degree_text"
@@ -35,7 +35,7 @@
                 android:textColor="@color/colorFont"
                 android:textSize="20sp"
                 android:text="晴"
-                />
+        />
         <TextView
                 android:id="@+id/update_time_text"
                 android:layout_width="wrap_content"
@@ -46,5 +46,90 @@
                 android:textSize="15sp"
                 android:text="2018/4/30"
         />
+
     </RelativeLayout>
+    <LinearLayout
+            android:id="@+id/weather_now_Linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/weather_now_layout"
+            android:background="@color/colorWhite"
+    >
+        <TextView
+                android:id="@+id/wind_direction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="风向"
+                android:layout_margin="15dp"
+                android:textSize="15sp"
+        />
+
+        <TextView
+                android:id="@+id/wind_strength"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:text="风力"
+                android:textSize="15sp"
+        />
+
+        <TextView
+                android:id="@+id/wind_speed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:text="风力"
+                android:textSize="15sp"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/weather_now_Linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_below="@id/weather_now_Linear1"
+            android:background="@color/colorWhite"
+    >
+        <TextView
+                android:id="@+id/hum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="相对湿度"
+                android:layout_margin="15dp"
+                android:textSize="15sp"
+        />
+
+        <TextView
+                android:id="@+id/rain_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:text="降水量"
+                android:textSize="15sp"
+        />
+
+        <TextView
+                android:id="@+id/pres"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:text="大气压强"
+                android:textSize="15sp"
+        />
+
+    </LinearLayout>
 </RelativeLayout>
