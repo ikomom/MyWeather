@@ -111,6 +111,7 @@ public class MainActivity extends BaseActivity {
     //LBS定位
     public LocationClient mlocationClient;
     public static String currentPosition = "";
+    public static String currentCity = "";
 
     @Override
     public void initView() {
@@ -176,6 +177,7 @@ public class MainActivity extends BaseActivity {
         //LBS定位
         mlocationClient = new LocationClient(getApplicationContext());
         mlocationClient.registerLocationListener(new MyLocationListener());//监听定位位置
+
         List<String> permissionList = new ArrayList<>();//用List来管理权限
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -202,8 +204,9 @@ public class MainActivity extends BaseActivity {
         } else {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String weatherString = prefs.getString("weatherResponse", null);        // weather 保存API 返回的字符串
+            String current = prefs.getString("currentPosition", null);
 
-            if (weatherString != null) {
+            if (weatherString != null && weatherString.equals(current)) {
                 // 有缓存时直接解析天气数据
                 Weather weather = Utility.handleWeatherResponse(weatherString);
                 showWeatherInfo(weather);
@@ -219,8 +222,8 @@ public class MainActivity extends BaseActivity {
                 } else {
                     showDialog();
                 }
-
             }
+
 //            Intent intent = new Intent(MainActivity.this, AutoUpdateService.class);
 //            startService(intent);
         }
@@ -235,6 +238,7 @@ public class MainActivity extends BaseActivity {
         uvBtn.setOnClickListener(this);
         clothesBtn.setOnClickListener(this);
         coldBtn.setOnClickListener(this);
+
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -485,6 +489,9 @@ public class MainActivity extends BaseActivity {
 
         }
     }
+
+
+
 
     /**
      * 弹出信息
