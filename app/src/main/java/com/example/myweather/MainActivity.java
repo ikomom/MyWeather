@@ -38,6 +38,7 @@ import com.example.myweather.gson.Lifestyle;
 import com.example.myweather.gson.Weather;
 import com.example.myweather.hourList.Hour;
 import com.example.myweather.hourList.HourAdapter;
+import com.example.myweather.service.AutoUpdateService;
 import com.example.myweather.util.*;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -131,16 +132,16 @@ public class MainActivity extends BaseActivity {
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
 
         //设置hourly
-//        hourDegree = (TextView) findViewById(R.id.hour_degree);
-//        hourText = (TextView) findViewById(R.id.hour_text);
-//        hourTime = (TextView) findViewById(R.id.hout_time);
-//
-//        hourRecycler = (RecyclerView) findViewById(R.id.weather_hourly);
-//        hourAdapter = new HourAdapter(hourList);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//        hourRecycler.setLayoutManager(linearLayoutManager);
-//        hourRecycler.setAdapter(hourAdapter);
+        hourDegree = (TextView) findViewById(R.id.hour_degree);
+        hourText = (TextView) findViewById(R.id.hour_text);
+        hourTime = (TextView) findViewById(R.id.hout_time);
+
+        hourRecycler = (RecyclerView) findViewById(R.id.weather_hourly);
+        hourAdapter = new HourAdapter(hourList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        hourRecycler.setLayoutManager(linearLayoutManager);
+        hourRecycler.setAdapter(hourAdapter);
 
         //weather_now
         nowLayout = (RelativeLayout) findViewById(R.id.weather_now_layout);
@@ -224,8 +225,8 @@ public class MainActivity extends BaseActivity {
                 }
             }
 
-//            Intent intent = new Intent(MainActivity.this, AutoUpdateService.class);
-//            startService(intent);
+            Intent intent = new Intent(MainActivity.this, AutoUpdateService.class);
+            startService(intent);
         }
     }
 
@@ -356,7 +357,7 @@ public class MainActivity extends BaseActivity {
         weatherInfo.setText(weatherInfo_show);
         update_time.setText("数据更新时间" + updateTime.split(" ")[1]);
         wind_dir.setText("风向:" + windDirection);
-        wind_sc.setText("强度:" + windStrength);
+        wind_sc.setText("风力:" + windStrength + "级");
         wind_spd.setText("风速:" + windSpeed + "km/h");
         hum.setText("湿度:" + relativeHum + "%");
         pcpn.setText("降水量:" + rainCount + "ms");
@@ -387,21 +388,21 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-//        //hour不能使用了，接下来添加风速等信息吧
-//        try {
-//            hourList.clear();
-//            for (Hourly hourly:weather.hourly){
-//                Hour hour = new Hour();
-//                hour.setDegree(hourly.temperature + "°" );
-//                hour.setText(hourly.cond_text);
-//                hour.setTime(hourly.time_now.split(" ")[1]);
-//                hourList.add(hour);
-//            }
-//        } catch (Exception e) {
-//           e.printStackTrace();
-//           ToastUtil.showMessage(getApplicationContext(),"空的");
-//        }
-//        hourAdapter.notifyDataSetChanged();
+        //hourly
+        try {
+            hourList.clear();
+            for (Hourly hourly:weather.hourly){
+                Hour hour = new Hour();
+                hour.setDegree(hourly.temperature + "°" );
+                hour.setText(hourly.cond_txt);
+                hour.setTime(hourly.time_now.split(" ")[1]);
+                hourList.add(hour);
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+           ToastUtil.showMessage(getApplicationContext(),"空的");
+        }
+        hourAdapter.notifyDataSetChanged();
 
         //lifestyle
         lifestyles.clear();
